@@ -8,7 +8,7 @@ export default function NpaPage() {
 
   return (
     <NpaLayout>
-      <div className="p-4">
+      <div className="p-4 pb-20">
         {/* Welcome Banner */}
         <div className="bg-white rounded-lg p-4 mb-6 shadow-md">
           <h2 className="text-lg font-semibold text-sam-text-primary mb-2">

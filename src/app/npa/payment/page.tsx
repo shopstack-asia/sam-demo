@@ -12,7 +12,7 @@ export default function PaymentPage() {
 
   return (
     <NpaLayout>
-      <div className="p-4">
+      <div className="p-4 pb-20">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-sam-text-primary mb-2">
             Deposit Payment

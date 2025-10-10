@@ -32,7 +32,7 @@ export default function AppointmentPage() {
   if (isSubmitted) {
     return (
       <NpaLayout>
-        <div className="p-4">
+        <div className="p-4 pb-20">
           <div className="bg-white rounded-lg p-6 shadow-md text-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Calendar className="text-green-600" size={32} />
@@ -57,7 +57,7 @@ export default function AppointmentPage() {
 
   return (
     <NpaLayout>
-      <div className="p-4">
+      <div className="p-4 pb-20">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-sam-text-primary mb-2">
             Schedule Viewing

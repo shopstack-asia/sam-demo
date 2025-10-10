@@ -1,8 +1,11 @@
+'use client';
+
 import NpaLayout from '@/components/NpaLayout';
 import { mockProperties } from '@/data/properties';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Heart, Share, Download, Phone } from 'lucide-react';
+import { Heart, Share, Download, Phone, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 interface PropertyPageProps {
   params: Promise<{
@@ -10,9 +13,49 @@ interface PropertyPageProps {
   }>;
 }
 
-export default async function PropertyPage({ params }: PropertyPageProps) {
-  const { id } = await params;
-  const property = mockProperties.find(p => p.id === id);
+export default function PropertyPage({ params }: PropertyPageProps) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [property, setProperty] = useState<any>(null);
+  const [carouselImages, setCarouselImages] = useState<string[]>([]);
+  
+  // Generate multiple images for carousel
+  const generateCarouselImages = (property: any) => {
+    const baseImages = [
+      property.image,
+      '/images/condo1.jpg',
+      '/images/condo2.jpg', 
+      '/images/condo3.jpg',
+      '/images/house1.jpg',
+      '/images/house2.jpg'
+    ];
+    return baseImages.slice(0, 6); // Take first 6 images
+  };
+
+  // Load property data
+  useEffect(() => {
+    const loadProperty = async () => {
+      const { id } = await params;
+      const foundProperty = mockProperties.find(p => p.id === id);
+      setProperty(foundProperty);
+      if (foundProperty) {
+        setCarouselImages(generateCarouselImages(foundProperty));
+      }
+    };
+    loadProperty();
+  }, [params]);
+
+  // Auto slide effect
+  useEffect(() => {
+    if (carouselImages.length <= 1) return;
+    
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => 
+        prev === carouselImages.length - 1 ? 0 : prev + 1
+      );
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [carouselImages.length]);
 
   if (!property) {
     return (
@@ -34,16 +77,84 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
 
   return (
     <NpaLayout>
-      <div className="p-4">
-        {/* Property Image */}
+      <div className="p-4 pb-20">
+        {/* Back Button */}
+        <div className="mb-4">
+          <Link
+            href="/npa"
+            className="inline-flex items-center gap-2 text-sam-primary hover:text-[#005a42] transition-colors duration-200"
+          >
+            <ArrowLeft size={20} />
+            <span className="font-medium">Back to Properties</span>
+          </Link>
+        </div>
+
+        {/* Property Image Carousel */}
         <div className="relative mb-4">
-          <Image
-            src={property.image}
-            alt={property.name}
-            width={400}
-            height={300}
-            className="w-full h-64 object-cover rounded-lg"
-          />
+          <div className="relative w-full h-64 overflow-hidden rounded-lg">
+            <div className="relative w-full h-full">
+              {carouselImages.map((image, index) => (
+                <Image
+                  key={index}
+                  src={image}
+                  alt={property.name}
+                  width={400}
+                  height={300}
+                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+                    index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                  }`}
+                />
+              ))}
+            </div>
+            
+            {/* Navigation Arrows */}
+            {carouselImages.length > 1 && (
+              <>
+                <button
+                  onClick={() => setCurrentImageIndex((prev) => 
+                    prev === 0 ? carouselImages.length - 1 : prev - 1
+                  )}
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 hover:scale-110 transition-all duration-300 ease-in-out"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <button
+                  onClick={() => setCurrentImageIndex((prev) => 
+                    prev === carouselImages.length - 1 ? 0 : prev + 1
+                  )}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 hover:scale-110 transition-all duration-300 ease-in-out"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </>
+            )}
+            
+            {/* Image Counter */}
+            {carouselImages.length > 1 && (
+              <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm transition-all duration-300 ease-in-out hover:bg-opacity-70">
+                {currentImageIndex + 1} / {carouselImages.length}
+              </div>
+            )}
+          </div>
+          
+          {/* Image Dots Indicator */}
+          {carouselImages.length > 1 && (
+            <div className="flex justify-center gap-2 mt-3">
+              {carouselImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ease-in-out hover:scale-125 ${
+                    index === currentImageIndex 
+                      ? 'bg-sam-primary scale-125' 
+                      : 'bg-gray-300 hover:bg-sam-secondary'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+          
+          {/* Tags */}
           <div className="absolute top-2 left-2 flex gap-1">
             {property.tags.map((tag, index) => (
               <span
@@ -106,18 +217,15 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
               Schedule Viewing
             </Link>
             
-            <div className="flex gap-2">
-              <button className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-sam-primary text-sam-primary rounded-lg hover:bg-sam-primary hover:text-white transition-colors">
-                <Heart size={16} />
-                <span>Save</span>
+            <div className="flex justify-end gap-3">
+              <button className="w-8 h-8 flex items-center justify-center bg-white border-2 border-sam-primary text-sam-primary rounded-full hover:bg-sam-primary hover:text-white transition-colors duration-200 shadow-md">
+                <Heart size={13} />
               </button>
-              <button className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-sam-primary text-sam-primary rounded-lg hover:bg-sam-primary hover:text-white transition-colors">
-                <Share size={16} />
-                <span>Share</span>
+              <button className="w-8 h-8 flex items-center justify-center bg-white border-2 border-sam-primary text-sam-primary rounded-full hover:bg-sam-primary hover:text-white transition-colors duration-200 shadow-md">
+                <Share size={13} />
               </button>
-              <button className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-sam-primary text-sam-primary rounded-lg hover:bg-sam-primary hover:text-white transition-colors">
-                <Download size={16} />
-                <span>Download</span>
+              <button className="w-8 h-8 flex items-center justify-center bg-white border-2 border-sam-primary text-sam-primary rounded-full hover:bg-sam-primary hover:text-white transition-colors duration-200 shadow-md">
+                <Download size={13} />
               </button>
             </div>
           </div>
