@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import NpaLayout from '@/components/NpaLayout';
-import { Upload, FileText, User, CheckCircle } from 'lucide-react';
+import { Upload, CheckCircle } from 'lucide-react';
 
 export default function SubmitInterestPage() {
   const [formData, setFormData] = useState({

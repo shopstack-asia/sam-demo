@@ -78,7 +78,7 @@ export default function PaymentPage() {
             <li>1. Open your mobile banking app</li>
             <li>2. Scan the QR code above</li>
             <li>3. Enter the amount: THB 50,000</li>
-            <li>4. Add reference: "Deposit for Condo Sukhumvit 39"</li>
+            <li>4. Add reference: &quot;Deposit for Condo Sukhumvit 39&quot;</li>
             <li>5. Complete the payment</li>
             <li>6. Keep the payment receipt for your records</li>
           </ol>

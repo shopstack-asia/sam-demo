@@ -5,13 +5,14 @@ import Image from 'next/image';
 import { Heart, Share, Download, Phone } from 'lucide-react';
 
 interface PropertyPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default function PropertyPage({ params }: PropertyPageProps) {
-  const property = mockProperties.find(p => p.id === params.id);
+export default async function PropertyPage({ params }: PropertyPageProps) {
+  const { id } = await params;
+  const property = mockProperties.find(p => p.id === id);
 
   if (!property) {
     return (

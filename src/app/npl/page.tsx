@@ -28,7 +28,7 @@ export default function NplPage() {
             NPL Section Coming Soon
           </h1>
           <p className="text-gray-600 mb-8">
-            We're working hard to bring you the Non-Performing Loan (NPL) service. 
+            We&apos;re working hard to bring you the Non-Performing Loan (NPL) service. 
             This feature will be available soon.
           </p>
 
