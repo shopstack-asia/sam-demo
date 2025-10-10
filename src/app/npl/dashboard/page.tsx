@@ -1,7 +1,7 @@
 'use client';
 
 import NplLayout from '@/components/NplLayout';
-import { QrCode, Calculator, Calendar, DollarSign, History, AlertCircle } from 'lucide-react';
+import { QrCode, Calculator, Calendar, DollarSign, AlertCircle } from 'lucide-react';
 
 export default function DashboardPage() {
   const mockUser = {

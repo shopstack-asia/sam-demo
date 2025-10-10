@@ -4,12 +4,12 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
+  Home, 
   Search, 
-  Calendar, 
-  FileDown, 
-  QrCode, 
-  Upload, 
-  MessageCircle 
+  Gavel, 
+  Heart, 
+  User,
+  MessageCircle
 } from 'lucide-react';
 
 interface NpaLayoutProps {
@@ -17,12 +17,11 @@ interface NpaLayoutProps {
 }
 
 const menuItems = [
-  { href: '/npa/search', icon: Search, label: 'Search Property' },
-  { href: '/npa/appointment', icon: Calendar, label: 'Appointment' },
-  { href: '/npa/brochure', icon: FileDown, label: 'Download Brochure' },
-  { href: '/npa/payment', icon: QrCode, label: 'QR Payment' },
-  { href: '/npa/submit-interest', icon: Upload, label: 'Submit Interest' },
-  { href: '/npa/contact', icon: MessageCircle, label: 'Contact' },
+  { href: '/npa', icon: Home, label: 'Home' },
+  { href: '/npa/search', icon: Search, label: 'Browse' },
+    { href: '/npa/auction', icon: Gavel, label: 'Auction' },
+    { href: '/npa/favorites', icon: Heart, label: 'Favorites' },
+    { href: '/npa/profile', icon: User, label: 'Profile' },
 ];
 
 export default function NpaLayout({ children }: NpaLayoutProps) {
@@ -49,10 +48,12 @@ export default function NpaLayout({ children }: NpaLayoutProps) {
               <span className="text-xs opacity-90">Non-Performing Asset</span>
             </div>
           </Link>
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-sam-text-light rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium">Online</span>
-          </div>
+          <Link
+            href="/npa/contact"
+            className="flex items-center justify-center text-sam-text-light w-8 h-8 rounded-full transition-all duration-200 hover:scale-110 drop-shadow-2xl hover:drop-shadow-2xl"
+          >
+            <MessageCircle size={24} />
+          </Link>
         </div>
       </header>
 
@@ -63,7 +64,7 @@ export default function NpaLayout({ children }: NpaLayoutProps) {
 
       {/* Sticky Bottom Rich Menu */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
-        <div className="grid grid-cols-3 gap-2 p-2">
+        <div className="flex justify-around items-center p-3">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -72,13 +73,19 @@ export default function NpaLayout({ children }: NpaLayoutProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center justify-center p-2 rounded-lg transition-colors ${
+                className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200 ease-in-out transform ${
                   isActive 
-                    ? 'bg-sam-secondary text-sam-text-light' 
-                    : 'text-sam-primary hover:bg-sam-accent'
+                    ? 'text-sam-primary' 
+                    : 'text-sam-primary hover:bg-sam-accent hover:scale-105'
                 }`}
               >
-                <Icon size={20} />
+                <div className={`transition-all duration-200 ${
+                  isActive 
+                    ? 'drop-shadow-2xl' 
+                    : ''
+                }`}>
+                  <Icon size={22} />
+                </div>
                 <span className="text-xs mt-1 text-center leading-tight">
                   {item.label}
                 </span>

@@ -4,7 +4,7 @@ import NpaLayout from '@/components/NpaLayout';
 import { mockProperties } from '@/data/properties';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Heart, Share, Download, Phone, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
+import { Heart, Share, Download, Phone, ChevronLeft, ChevronRight, ArrowLeft, QrCode } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface PropertyPageProps {
@@ -15,11 +15,11 @@ interface PropertyPageProps {
 
 export default function PropertyPage({ params }: PropertyPageProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [property, setProperty] = useState<any>(null);
+  const [property, setProperty] = useState<typeof mockProperties[0] | null>(null);
   const [carouselImages, setCarouselImages] = useState<string[]>([]);
   
   // Generate multiple images for carousel
-  const generateCarouselImages = (property: any) => {
+  const generateCarouselImages = (property: typeof mockProperties[0]) => {
     const baseImages = [
       property.image,
       '/images/condo1.jpg',
@@ -36,7 +36,7 @@ export default function PropertyPage({ params }: PropertyPageProps) {
     const loadProperty = async () => {
       const { id } = await params;
       const foundProperty = mockProperties.find(p => p.id === id);
-      setProperty(foundProperty);
+      setProperty(foundProperty || null);
       if (foundProperty) {
         setCarouselImages(generateCarouselImages(foundProperty));
       }
@@ -227,6 +227,12 @@ export default function PropertyPage({ params }: PropertyPageProps) {
               <button className="w-8 h-8 flex items-center justify-center bg-white border-2 border-sam-primary text-sam-primary rounded-full hover:bg-sam-primary hover:text-white transition-colors duration-200 shadow-md">
                 <Download size={13} />
               </button>
+              <Link
+                href="/npa/payment"
+                className="w-8 h-8 flex items-center justify-center bg-sam-primary text-white rounded-full hover:bg-[#005a42] transition-colors duration-200 shadow-md"
+              >
+                <QrCode size={13} />
+              </Link>
             </div>
           </div>
         </div>
