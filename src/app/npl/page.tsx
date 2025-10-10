@@ -1,60 +1,104 @@
+'use client';
+
+import NplLayout from '@/components/NplLayout';
 import Link from 'next/link';
-import { ArrowLeft, Clock } from 'lucide-react';
+import Image from 'next/image';
+import { LogIn, Eye, ArrowRight } from 'lucide-react';
 
 export default function NplPage() {
   return (
-    <div className="min-h-screen bg-sam-accent">
-      {/* Header */}
-      <header className="bg-sam-primary text-sam-text-light px-4 py-3">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <ArrowLeft size={20} />
-            <span className="text-xl font-bold">SAM NPL</span>
-          </Link>
-          <div className="w-6 h-6 bg-sam-secondary rounded-full"></div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
-        <div className="max-w-md w-full text-center">
-          {/* Coming Soon Icon */}
-          <div className="w-24 h-24 bg-sam-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Clock className="text-sam-primary" size={48} />
+    <NplLayout>
+      <div className="p-4">
+        {/* Hero Section */}
+        <div className="bg-white rounded-lg p-6 mb-6 shadow-md text-center">
+          <div className="mb-4">
+            <Image
+              src="https://placehold.co/600x400/006E52/FFFFFF?text=NPL+Dashboard"
+              alt="NPL Dashboard"
+              width={300}
+              height={200}
+              className="w-full h-48 object-cover rounded-lg mx-auto"
+            />
           </div>
-
-          {/* Coming Soon Message */}
-          <h1 className="text-3xl font-bold text-sam-text-primary mb-4">
-            NPL Section Coming Soon
+          
+          <h1 className="text-2xl font-bold text-sam-text-primary mb-2">
+            NPL (Non-Performing Loan)
           </h1>
-          <p className="text-gray-600 mb-8">
-            We&apos;re working hard to bring you the Non-Performing Loan (NPL) service. 
-            This feature will be available soon.
+          <p className="text-gray-600 mb-6">
+            Manage your debt status and make payments
           </p>
-
-          {/* Action Buttons */}
-          <div className="space-y-4">
+          
+          <div className="space-y-3">
             <Link
-              href="/npa"
-              className="block w-full bg-sam-primary hover:bg-[#005a42] text-sam-text-light font-semibold py-3 px-6 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+              href="/npl/login"
+              className="w-full bg-sam-primary hover:bg-[#005a42] text-sam-text-light font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
             >
-              Explore NPA Properties
+              <LogIn size={20} />
+              <span>Login / Verify ID</span>
             </Link>
             
             <Link
-              href="/"
-              className="block w-full border border-sam-primary text-sam-primary hover:bg-sam-primary hover:text-sam-text-light font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+              href="/npl/dashboard"
+              className="w-full border border-sam-primary text-sam-primary font-medium py-3 px-4 rounded-lg hover:bg-sam-primary hover:text-white transition-colors duration-200 flex items-center justify-center gap-2"
             >
-              Back to Home
+              <Eye size={20} />
+              <span>View Demo Dashboard</span>
             </Link>
           </div>
+        </div>
 
-          {/* Additional Info */}
-          <div className="mt-8 text-sm text-gray-500">
-            <p>For immediate assistance, please contact our support team.</p>
+        {/* Features Section */}
+        <div className="bg-white rounded-lg p-4 shadow-md mb-6">
+          <h3 className="font-semibold text-sam-text-primary mb-3">
+            NPL Features
+          </h3>
+          <div className="space-y-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-sam-primary rounded-full"></div>
+              <span>Check debt balance and payment history</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-sam-primary rounded-full"></div>
+              <span>Calculate installment plans</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-sam-primary rounded-full"></div>
+              <span>Upload and manage documents</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-sam-primary rounded-full"></div>
+              <span>Find branch locations</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-sam-primary rounded-full"></div>
+              <span>Contact support team</span>
+            </div>
           </div>
         </div>
-      </main>
-    </div>
+
+        {/* Quick Actions */}
+        <div className="bg-white rounded-lg p-4 shadow-md">
+          <h3 className="font-semibold text-sam-text-primary mb-3">
+            Quick Actions
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
+            <Link
+              href="/npl/register"
+              className="flex items-center justify-center gap-2 bg-sam-secondary hover:bg-[#008f6f] text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200"
+            >
+              <ArrowRight size={16} />
+              <span>Register</span>
+            </Link>
+            <Link
+              href="/npl/contact"
+              className="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200"
+            >
+              <ArrowRight size={16} />
+              <span>Get Help</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </NplLayout>
   );
 }
