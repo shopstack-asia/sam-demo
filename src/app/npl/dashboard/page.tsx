@@ -90,7 +90,7 @@ export default function DashboardPage() {
           <div className="grid grid-cols-2 gap-3">
             <button className="flex items-center justify-center gap-2 bg-sam-primary hover:bg-[#005a42] text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200">
               <QrCode size={20} />
-              <span>Pay via QR</span>
+              <span>QR</span>
             </button>
             <button className="flex items-center justify-center gap-2 bg-sam-secondary hover:bg-[#008f6f] text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200">
               <Calculator size={20} />

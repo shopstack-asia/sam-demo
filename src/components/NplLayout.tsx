@@ -17,7 +17,7 @@ interface NplLayoutProps {
 
 const menuItems = [
   { href: '/npl/dashboard', icon: Home, label: 'Dashboard' },
-  { href: '/npl/debt-calculator', icon: Calculator, label: 'Debt Calculator' },
+  { href: '/npl/debt-calculator', icon: Calculator, label: 'Calculator' },
   { href: '/npl/document-management', icon: FileText, label: 'Documents' },
   { href: '/npl/branches', icon: MapPin, label: 'Branches' },
   { href: '/npl/contact', icon: Phone, label: 'Contact' },

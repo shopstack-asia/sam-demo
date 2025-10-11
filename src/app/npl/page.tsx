@@ -13,7 +13,7 @@ export default function NplPage() {
         <div className="bg-white rounded-lg p-6 mb-6 shadow-md text-center">
           <div className="mb-4">
             <Image
-              src="https://placehold.co/600x400/006E52/FFFFFF?text=NPL+Dashboard"
+              src="/images/npl-dashboard.jpg"
               alt="NPL Dashboard"
               width={300}
               height={200}
