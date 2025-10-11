@@ -6,7 +6,26 @@ import NpaLayout from '@/components/NpaLayout';
 import { mockProperties } from '@/data/properties';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, Filter, X, ChevronDown, List, Map } from 'lucide-react';
+import { Search, Filter, X, ChevronDown, List, Map, Heart } from 'lucide-react';
+
+// Google Maps types
+interface GoogleMapsWindow extends Window {
+  google: {
+    maps: {
+      Map: new (element: HTMLElement, options: Record<string, unknown>) => unknown;
+      Marker: new (options: Record<string, unknown>) => unknown;
+      InfoWindow: new (options: Record<string, unknown>) => unknown;
+      Size: new (width: number, height: number) => unknown;
+      Point: new (x: number, y: number) => unknown;
+      MapTypeId: {
+        ROADMAP: string;
+      };
+    };
+  };
+}
+
+// Google Maps API Key - Replace with your actual API key
+const GOOGLE_MAPS_API_KEY = 'AIzaSyDqymumDt7gZFuxBphek76YHP2S9HC6MJw';
 
 function SearchContent() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -123,30 +142,64 @@ function SearchContent() {
   // Load Google Maps
   useEffect(() => {
     if (viewMode === 'map' && !mapLoaded) {
+      // Check if Google Maps is already loaded
+      if (typeof window !== 'undefined' && (window as unknown as GoogleMapsWindow).google && (window as unknown as GoogleMapsWindow).google.maps) {
+        setMapLoaded(true);
+        initializeMap();
+        return;
+      }
+
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`;
       script.async = true;
       script.defer = true;
       script.onload = () => {
+        console.log('Google Maps loaded successfully');
         setMapLoaded(true);
-        initializeMap();
+        // Add delay to ensure mapRef is ready
+        setTimeout(() => {
+          initializeMap();
+        }, 200);
+      };
+      script.onerror = (error) => {
+        console.error('Failed to load Google Maps:', error);
+        setMapLoaded(false);
       };
       document.head.appendChild(script);
     }
   }, [viewMode, mapLoaded]);
 
-  const initializeMap = () => {
-    if (!mapRef.current || typeof window === 'undefined') return;
+  // Initialize map when mapLoaded changes
+  useEffect(() => {
+    if (mapLoaded && viewMode === 'map') {
+      initializeMap();
+    }
+  }, [mapLoaded, viewMode]);
 
+  const initializeMap = () => {
+    // Add a small delay to ensure DOM is ready
+    setTimeout(() => {
+      if (!mapRef.current || typeof window === 'undefined') {
+        console.log('Map ref or window not available');
+        return;
+      }
+
+      if (!(window as unknown as GoogleMapsWindow).google || !(window as unknown as GoogleMapsWindow).google.maps) {
+        console.log('Google Maps not loaded yet');
+        return;
+      }
+
+      console.log('Initializing Google Map...');
+      console.log('Map ref element:', mapRef.current);
+    
     // Bangkok center
     const bangkok = { lat: 13.7563, lng: 100.5018 };
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const map = new (window as any).google.maps.Map(mapRef.current, {
-      zoom: 12,
-      center: bangkok,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      mapTypeId: (window as any).google.maps.MapTypeId.ROADMAP,
+    try {
+      const map = new (window as unknown as GoogleMapsWindow).google.maps.Map(mapRef.current, {
+        zoom: 12,
+        center: bangkok,
+        mapTypeId: (window as unknown as GoogleMapsWindow).google.maps.MapTypeId.ROADMAP,
       styles: [
         {
           featureType: 'poi',
@@ -156,53 +209,87 @@ function SearchContent() {
       ]
     });
 
-    // Add random property markers
+    // Add random property markers with price-based colors
     const propertyLocations = [
-      { lat: 13.7563, lng: 100.5018, name: "Condo Sukhumvit 39", price: "5.8M" },
-      { lat: 13.7300, lng: 100.5200, name: "House Thonglor", price: "12.5M" },
-      { lat: 13.7800, lng: 100.4800, name: "Townhouse Ari", price: "8.2M" },
-      { lat: 13.7200, lng: 100.5400, name: "Commercial Sathorn", price: "25.0M" },
-      { lat: 13.7600, lng: 100.4900, name: "Office Silom", price: "18.5M" },
-      { lat: 13.7400, lng: 100.5100, name: "Warehouse Bangna", price: "15.2M" },
-      { lat: 13.7700, lng: 100.4700, name: "Factory Lat Krabang", price: "22.8M" },
-      { lat: 13.7500, lng: 100.5300, name: "Land Phrom Phong", price: "35.0M" }
+      { lat: 13.7563, lng: 100.5018, name: "Condo Sukhumvit 39", price: "5M", priceValue: 5, type: "Condo" },
+      { lat: 13.7300, lng: 100.5200, name: "House Thonglor", price: "6M", priceValue: 6, type: "House" },
+      { lat: 13.7800, lng: 100.4800, name: "Townhouse Ari", price: "9M", priceValue: 9, type: "Townhouse" },
+      { lat: 13.7200, lng: 100.5400, name: "Commercial Sathorn", price: "25M", priceValue: 25, type: "Commercial" },
+      { lat: 13.7600, lng: 100.4900, name: "Office Silom", price: "18M", priceValue: 18, type: "Office" },
+      { lat: 13.7400, lng: 100.5100, name: "Warehouse Bangna", price: "15M", priceValue: 15, type: "Warehouse" },
+      { lat: 13.7700, lng: 100.4700, name: "Factory Lat Krabang", price: "22M", priceValue: 22, type: "Factory" },
+      { lat: 13.7500, lng: 100.5300, name: "Land Phrom Phong", price: "35M", priceValue: 35, type: "Land" }
     ];
 
-    propertyLocations.forEach((location, index) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const marker = new (window as any).google.maps.Marker({
+    // Function to get icon emoji based on asset type
+    const getAssetIcon = (type: string) => {
+      const icons: { [key: string]: string } = {
+        'Condo': '🏢',
+        'House': '🏡',
+        'Townhouse': '🏘️',
+        'Commercial': '🏬',
+        'Office': '🏢',
+        'Warehouse': '🏗️',
+        'Factory': '🏭',
+        'Land': '🌳'
+      };
+      return icons[type] || '🏢';
+    };
+
+
+
+    propertyLocations.forEach((location) => {
+      const marker = new (window as unknown as GoogleMapsWindow).google.maps.Marker({
         position: { lat: location.lat, lng: location.lng },
         map: map,
         title: location.name,
         icon: {
           url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
-            <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="20" cy="20" r="18" fill="#006E52" stroke="white" stroke-width="2"/>
-              <text x="20" y="25" text-anchor="middle" fill="white" font-size="12" font-weight="bold">${index + 1}</text>
+            <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feDropShadow dx="0" dy="2" stdDeviation="1" flood-color="rgba(0,0,0,0.3)"/>
+                </filter>
+              </defs>
+              
+              <!-- Price Background -->
+              <rect x="5" y="5" width="50" height="18" rx="9" fill="white" stroke="#006E52" stroke-width="2" filter="url(#shadow)"/>
+              
+              <!-- Price Text -->
+              <text x="30" y="17" text-anchor="middle" font-size="12" font-weight="bold" font-family="Arial, sans-serif" fill="#006E52">${location.price}</text>
+              
+              <!-- Asset Type Icon (Emoji) -->
+              <text x="30" y="45" text-anchor="middle" font-size="20" filter="url(#shadow)">${getAssetIcon(location.type)}</text>
             </svg>
           `)}`,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          scaledSize: new (window as any).google.maps.Size(40, 40),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          anchor: new (window as any).google.maps.Point(20, 20)
+          scaledSize: new (window as unknown as GoogleMapsWindow).google.maps.Size(60, 60),
+          anchor: new (window as unknown as GoogleMapsWindow).google.maps.Point(30, 60)
         }
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const infoWindow = new (window as any).google.maps.InfoWindow({
+      const infoWindow = new (window as unknown as GoogleMapsWindow).google.maps.InfoWindow({
         content: `
           <div style="padding: 8px;">
             <h3 style="margin: 0 0 4px 0; font-size: 14px; font-weight: bold;">${location.name}</h3>
-            <p style="margin: 0; font-size: 12px; color: #666;">${location.price} THB</p>
+            <p style="margin: 0 0 2px 0; font-size: 12px; color: #666;">${location.type}</p>
+            <p style="margin: 0; font-size: 12px; color: #333; font-weight: bold;">${location.price} THB</p>
           </div>
         `
       });
 
-      marker.addListener('click', () => {
-        infoWindow.open(map, marker);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (marker as any).addListener('click', () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (infoWindow as any).open(map, marker);
         setSelectedProperty(location.name);
       });
     });
+    
+      console.log('Google Map initialized successfully');
+      } catch (error) {
+        console.error('Error initializing Google Map:', error);
+      }
+    }, 100); // 100ms delay
   };
 
   return (
@@ -320,8 +407,8 @@ function SearchContent() {
                   >
                     View Details
                   </Link>
-                  <button className="px-4 py-2 border border-sam-primary text-sam-primary rounded-lg hover:bg-sam-primary hover:text-white transition-colors">
-                    ♥
+                  <button className="px-2 py-2 border border-sam-primary text-sam-primary rounded-lg hover:bg-sam-primary hover:text-white transition-colors">
+                    <Heart size={20} />
                   </button>
                 </div>
               </div>
@@ -339,6 +426,15 @@ function SearchContent() {
                     <Map size={48} className="mx-auto text-gray-400 mb-4" />
                     <p className="text-gray-500">Loading Google Map...</p>
                     <p className="text-sm text-gray-400 mt-2">Please wait</p>
+                    <button 
+                      onClick={() => {
+                        console.log('Retrying Google Maps load...');
+                        setMapLoaded(false);
+                      }}
+                      className="mt-2 px-3 py-1 bg-sam-primary text-white rounded text-sm hover:bg-[#005a42]"
+                    >
+                      Retry
+                    </button>
                   </div>
                 </div>
               ) : (
