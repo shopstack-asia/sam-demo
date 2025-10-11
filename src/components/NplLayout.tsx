@@ -47,10 +47,21 @@ export default function NplLayout({ children }: NplLayoutProps) {
               <span className="text-xs opacity-90">Non-Performing Loan</span>
             </div>
           </Link>
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-sam-text-light rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium">Online</span>
-          </div>
+          <Link 
+            href="/npl/profile" 
+            className="flex items-center gap-3 hover:opacity-90 transition-opacity"
+          >
+            <div className="relative">
+              <Image
+                src="/images/profile-avatar.jpg"
+                alt="User Avatar"
+                width={40}
+                height={40}
+                className="rounded-full border-2 border-white shadow-lg"
+              />
+              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>
+            </div>
+          </Link>
         </div>
       </header>
 
