@@ -13,6 +13,7 @@ import {
 
 interface NplLayoutProps {
   children: React.ReactNode;
+  hideFooterMenu?: boolean;
 }
 
 const menuItems = [
@@ -23,7 +24,7 @@ const menuItems = [
   { href: '/npl/contact', icon: Phone, label: 'Contact' },
 ];
 
-export default function NplLayout({ children }: NplLayoutProps) {
+export default function NplLayout({ children, hideFooterMenu = false }: NplLayoutProps) {
   const pathname = usePathname();
 
   return (
@@ -71,26 +72,28 @@ export default function NplLayout({ children }: NplLayoutProps) {
       </main>
 
       {/* Bottom Rich Menu */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-lg z-50">
-        <div className="grid grid-cols-5 gap-1 p-2">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = pathname.startsWith(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex flex-col items-center justify-center p-2 text-xs font-medium transition-colors duration-200
-                  ${isActive ? 'text-sam-secondary' : 'text-sam-primary'}
-                  hover:text-sam-secondary`}
-              >
-                <Icon size={20} className="mb-1" />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </nav>
+      {!hideFooterMenu && (
+        <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-lg z-50">
+          <div className="grid grid-cols-5 gap-1 p-2">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname.startsWith(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex flex-col items-center justify-center p-2 text-xs font-medium transition-colors duration-200
+                    ${isActive ? 'text-sam-secondary' : 'text-sam-primary'}
+                    hover:text-sam-secondary`}
+                >
+                  <Icon size={20} className="mb-1" />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+      )}
     </div>
   );
 }

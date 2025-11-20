@@ -1,0 +1,46 @@
+<svg width="800" height="360" viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0FB27A"/>
+      <stop offset="50%" stop-color="#07A26B"/>
+      <stop offset="100%" stop-color="#00704A"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFE259"/>
+      <stop offset="100%" stop-color="#FFA751"/>
+    </linearGradient>
+    <clipPath id="rounded">
+      <rect x="0" y="0" width="800" height="360" rx="32" ry="32" />
+    </clipPath>
+  </defs>
+  <g clip-path="url(#rounded)">
+    <rect width="800" height="360" fill="url(#grad)" />
+    <circle cx="640" cy="40" r="120" fill="rgba(255,255,255,0.08)" />
+    <circle cx="720" cy="140" r="80" fill="rgba(255,255,255,0.06)" />
+    <path d="M0 260 Q200 220 400 260 T800 260 L800 360 L0 360 Z" fill="rgba(255,255,255,0.08)" />
+    <path d="M0 300 Q200 280 400 300 T800 300 L800 360 L0 360 Z" fill="rgba(255,255,255,0.12)" />
+    <g transform="translate(60,80)">
+      <rect x="0" y="0" width="360" height="200" rx="24" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.4)" />
+      <rect x="24" y="32" width="312" height="48" rx="12" fill="white" opacity="0.9" />
+      <rect x="24" y="96" width="180" height="40" rx="12" fill="white" opacity="0.9" />
+      <rect x="216" y="96" width="120" height="40" rx="12" fill="white" opacity="0.6" />
+      <rect x="24" y="152" width="312" height="16" rx="8" fill="url(#accent)" />
+    </g>
+    <g transform="translate(460,60)">
+      <rect x="0" y="0" width="260" height="200" rx="24" fill="rgba(0,0,0,0.12)" stroke="rgba(255,255,255,0.3)" />
+      <rect x="24" y="40" width="212" height="28" rx="14" fill="rgba(255,255,255,0.9)" />
+      <rect x="24" y="80" width="172" height="28" rx="14" fill="rgba(255,255,255,0.8)" />
+      <rect x="24" y="120" width="112" height="28" rx="14" fill="rgba(255,255,255,0.7)" />
+      <rect x="24" y="160" width="152" height="14" rx="7" fill="url(#accent)" />
+    </g>
+    <text x="72" y="88" font-size="28" font-family="sans-serif" fill="#FFFFFF" opacity="0.6">Thailand AMC</text>
+    <text x="72" y="136" font-size="48" font-family="sans-serif" font-weight="700" fill="#FFFFFF">โครงการ</text>
+    <text x="72" y="194" font-size="64" font-family="sans-serif" font-weight="800" fill="#FFFFFF">ปิดหนี้ไว</text>
+    <text x="72" y="252" font-size="48" font-family="sans-serif" font-weight="700" fill="#FFE259">ไปต่อได้</text>
+    <rect x="72" y="276" width="220" height="48" rx="24" fill="url(#accent)" />
+    <text x="92" y="308" font-size="24" font-family="sans-serif" font-weight="600" fill="#854600">สมัครเข้าร่วมโครงการ</text>
+    <path d="M640 276 L720 276 Q760 276 760 316 L760 316 Q760 356 720 356 L640 356" fill="rgba(0,0,0,0.15)" />
+    <text x="500" y="306" font-size="18" font-family="sans-serif" fill="#FFFFFF" opacity="0.8">ปิดภาระเก่า เพิ่มโอกาสใหม่</text>
+  </g>
+</svg>
+

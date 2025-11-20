@@ -29,6 +29,14 @@ export default function Home() {
             <div className="text-xl mb-1">NPL</div>
             <div className="text-sm opacity-90">Non-Performing Loan</div>
           </Link>
+
+          <Link
+            href="/amc"
+            className="block w-full bg-emerald-500/90 hover:bg-emerald-500 text-sam-text-light font-semibold py-4 px-6 rounded-xl transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 border border-white/20"
+          >
+            <div className="text-xl mb-1">AMC</div>
+            <div className="text-sm opacity-90">ปิดหนี้ไวไปต่อได้</div>
+          </Link>
         </div>
 
         {/* Footer */}
