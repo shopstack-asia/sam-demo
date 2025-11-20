@@ -1,4 +1,16 @@
-export const privacySections = [
+export interface PrivacySection {
+  title: string;
+  body: string[];
+}
+
+export interface AmcFormField {
+  id: string;
+  label: string;
+  placeholder: string;
+  type?: string;
+}
+
+export const privacySections: PrivacySection[] = [
   {
     title: '1. วัตถุประสงค์',
     body: [
@@ -15,7 +27,7 @@ export const privacySections = [
   }
 ];
 
-export const formFields = [
+export const formFields: AmcFormField[] = [
   { id: 'firstName', label: 'ชื่อ', placeholder: 'สามารถ' },
   { id: 'lastName', label: 'นามสกุล', placeholder: 'ใจดี' },
   { id: 'birthDate', label: 'วันเกิด', placeholder: '07/02/1970', type: 'date' },
@@ -23,5 +35,5 @@ export const formFields = [
   { id: 'phone', label: 'โทรศัพท์มือถือ (เบอร์หลัก)', placeholder: '08X-XXX-XXXX' },
   { id: 'lineId', label: 'Line ID', placeholder: 'john77' },
   { id: 'email', label: 'Email', placeholder: 'john77@email.com', type: 'email' }
-] as const;
+] ;
 

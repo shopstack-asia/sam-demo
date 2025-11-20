@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 
 import AmcHero from '@/components/amc/AmcHero';
@@ -9,6 +10,7 @@ import { formFields } from '../constants';
 
 export default function AmcRegisterPage() {
   const [formState, setFormState] = useState<Record<string, string>>({});
+  const router = useRouter();
 
   const canSubmit = useMemo(() => {
     return formFields.every((field) => (formState[field.id]?.length ?? 0) > 0);
@@ -61,6 +63,11 @@ export default function AmcRegisterPage() {
             canSubmit ? 'bg-sam-primary hover:bg-emerald-700' : 'bg-gray-300 cursor-not-allowed'
           }`}
           disabled={!canSubmit}
+          onClick={() => {
+            if (canSubmit) {
+              router.push('/amc/thank-you');
+            }
+          }}
         >
           ส่งข้อมูลสมัครเข้าร่วมโครงการ
         </button>
